@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community — LidarForge</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080c10;--bg2:#0d1218;--bg3:#111820;--accent:#00e5ff;--accent2:#ff6b35;--text:#e8edf2;--text2:#7a8a9a;--border:rgba(0,229,255,0.12);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,12,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .logo{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:0.08em;color:var(--accent);text-decoration:none}
+  .logo span{color:var(--text2)}
+  nav ul{display:flex;gap:36px;list-style:none}
+  nav a{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color 0.2s}
+  nav a:hover,nav a.active{color:var(--accent)}
+  .nav-cta{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--accent);border:none;padding:8px 20px;cursor:pointer;text-decoration:none;transition:opacity 0.2s}
+  .nav-cta:hover{opacity:0.85}
+  .page-header{position:relative;z-index:1;padding:120px 48px 64px;border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden}
+  .page-header::after{content:'';position:absolute;top:-40%;right:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(0,229,255,0.06) 0%,transparent 70%);pointer-events:none}
+  .breadcrumb{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text2);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+  .breadcrumb a{color:var(--text2);text-decoration:none;transition:color 0.2s}
+  .breadcrumb a:hover{color:var(--accent)}
+  .breadcrumb span{color:var(--accent)}
+  .page-header h1{font-size:clamp(32px,5vw,60px);font-weight:800;letter-spacing:-0.02em;line-height:1.05;margin-bottom:16px}
+  .page-header h1 em{font-style:normal;color:var(--accent)}
+  .page-header p{font-size:15px;color:var(--text2);max-width:560px;line-height:1.8}
+  .stats-bar{position:relative;z-index:1;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center}
+  .stat-item{flex:1;padding:20px 32px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+  .stat-item:last-child{border-right:none}
+  .stat-num{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--accent);line-height:1}
+  .stat-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text2)}
+  .community-layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 320px;gap:0;min-height:calc(100vh - 64px);align-items:start}
+  .feed{border-right:1px solid var(--border);padding:0}
+  .category-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto;scrollbar-width:none}
+  .category-tabs::-webkit-scrollbar{display:none}
+  .cat-tab{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:14px 24px;color:var(--text2);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.2s,border-color 0.2s}
+  .cat-tab:hover{color:var(--text)}
+  .cat-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .topic-list{padding:0}
+  .topic-row{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:20px 32px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s}
+  .topic-row:hover{background:rgba(0,229,255,0.03)}
+  .topic-left{display:flex;align-items:flex-start;gap:14px}
+  .topic-avatar{width:36px;height:36px;border-radius:4px;font-family:var(--mono);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .av-a{background:rgba(0,229,255,0.15);color:var(--accent)}
+  .av-b{background:rgba(255,107,53,0.15);color:var(--accent2)}
+  .av-c{background:rgba(124,58,237,0.15);color:#a78bfa}
+  .av-d{background:rgba(16,185,129,0.15);color:#34d399}
+  .av-e{background:rgba(251,191,36,0.15);color:#fbbf24}
+  .av-f{background:rgba(239,68,68,0.15);color:#f87171}
+  .topic-main{flex:1;min-width:0}
+  .topic-cats{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+  .tag{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px}
+  .tag-ros{background:rgba(255,107,53,0.12);color:var(--accent2)}
+  .tag-dev{background:rgba(0,229,255,0.10);color:var(--accent)}
+  .tag-hw{background:rgba(122,138,154,0.12);color:var(--text2)}
+  .tag-slam{background:rgba(124,58,237,0.12);color:#a78bfa}
+  .tag-sdk{background:rgba(16,185,129,0.12);color:#34d399}
+  .tag-announce{background:rgba(251,191,36,0.12);color:#fbbf24}
+  .tag-pinned{background:rgba(239,68,68,0.08);color:#f87171}
+  .topic-title-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topic-row:hover .topic-title-text{color:var(--accent)}
+  .topic-excerpt{font-size:12px;color:var(--text2);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:580px}
+  .topic-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:100px}
+  .topic-meta-right{font-family:var(--mono);font-size:9px;color:var(--text2);letter-spacing:0.05em;text-align:right}
+  .topic-replies-count{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text)}
+  .topic-replies-label{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2)}
+  .pinned-banner{background:rgba(251,191,36,0.04);border-bottom:1px solid rgba(251,191,36,0.1);padding:10px 32px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:#fbbf24;letter-spacing:0.1em}
+  .load-more{padding:24px 32px;display:flex;justify-content:center}
+  .load-more-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:none;border:1px solid var(--border);padding:10px 28px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
+  .load-more-btn:hover{border-color:var(--accent);background:rgba(0,229,255,0.04)}
+  .sidebar{padding:32px 24px;display:flex;flex-direction:column;gap:24px;background:var(--bg)}
+  .sidebar-block{background:var(--bg3);border:1px solid var(--border);padding:20px}
+  .sidebar-title{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sidebar-title::before{content:'';display:block;width:16px;height:1px;background:var(--accent)}
+  .join-cta{background:linear-gradient(135deg,rgba(0,229,255,0.06),rgba(0,229,255,0.02));border:1px solid rgba(0,229,255,0.2);padding:24px}
+  .join-cta h3{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-0.01em}
+  .join-cta p{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+  .join-btn{display:block;width:100%;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--accent);padding:11px;text-decoration:none;transition:opacity 0.2s;border:none;cursor:pointer}
+  .join-btn:hover{opacity:0.85}
+  .join-login{display:block;text-align:center;font-family:var(--mono);font-size:10px;color:var(--text2);text-decoration:none;margin-top:8px;transition:color 0.2s}
+  .join-login:hover{color:var(--accent)}
+  .cat-list{display:flex;flex-direction:column;gap:0}
+  .cat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .cat-item:last-child{border-bottom:none}
+  .cat-item-left{display:flex;align-items:center;gap:10px}
+  .cat-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+  .cat-item-name{font-size:13px;font-weight:600;color:var(--text)}
+  .cat-item-desc{font-size:11px;color:var(--text2)}
+  .cat-count{font-family:var(--mono);font-size:11px;color:var(--text2)}
+  .members-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .repo-list{display:flex;flex-direction:column;gap:10px}
+  .repo-item{border:1px solid var(--border);padding:12px;cursor:pointer;transition:border-color 0.2s}
+  .repo-item:hover{border-color:rgba(0,229,255,0.3)}
+  .repo-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px}
+  .repo-desc{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px}
+  .repo-meta{display:flex;gap:12px;font-family:var(--mono);font-size:10px;color:var(--text2)}
+  .new-topic-bar{position:relative;z-index:1;background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 32px;display:flex;align-items:center;justify-content:space-between}
+  .new-topic-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--accent);border:none;padding:9px 20px;cursor:pointer;transition:opacity 0.2s}
+  .new-topic-btn:hover{opacity:0.85}
+  .sort-options{display:flex;gap:4px}
+  .sort-btn{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;transition:color 0.2s,border-color 0.2s}
+  .sort-btn:hover,.sort-btn.active{color:var(--accent);border-color:rgba(0,229,255,0.3)}
+  footer{position:relative;z-index:1;background:var(--bg);border-top:1px solid var(--border);padding:32px 48px;display:flex;align-items:center;justify-content:space-between}
+  .footer-logo{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);letter-spacing:0.08em}
+  .footer-logo span{color:var(--text2)}
+  .footer-links{display:flex;gap:24px;list-style:none}
+  .footer-links a{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color 0.2s}
+  .footer-links a:hover{color:var(--accent)}
+  .footer-copy{font-family:var(--mono);font-size:10px;color:var(--text2)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .page-header{animation:fadeIn 0.5s ease both}
+  .stats-bar{animation:fadeIn 0.5s ease 0.1s both}
+  .community-layout{animation:fadeIn 0.5s ease 0.15s both}
+  ::-webkit-scrollbar{width:4px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.2)}
+  @media(max-width:900px){nav{padding:0 24px}nav ul{display:none}.page-header{padding:100px 24px 40px}.stats-bar{flex-wrap:wrap}.stat-item{min-width:50%}.community-layout{grid-template-columns:1fr}.sidebar{display:none}.topic-row{padding:16px 20px}.topic-excerpt{display:none}footer{flex-direction:column;gap:20px;text-align:center}.new-topic-bar{padding:12px 20px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">LiDAR<span>Forge</span></a>
+  <ul>
+    <li><a href="index.html#products">Products</a></li>
+    <li><a href="index.html#applications">Applications</a></li>
+    <li><a href="index.html#opensource">Open Source</a></li>
+    <li><a href="community.html" class="active">Community</a></li>
+    <li><a href="index.html#contact">Get a Quote</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Request Quote</a>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span>Community</span></div>
+  <h1>Where builders<br><em>talk shop</em></h1>
+  <p>Discuss projects, share code, get hardware support, and connect with developers using LidarForge sensors. Powered by Discourse — self-hosted, open, yours.</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">247</div><div class="stat-lbl">Members</div></div>
+  <div class="stat-item"><div class="stat-num">89</div><div class="stat-lbl">Topics</div></div>
+  <div class="stat-item"><div class="stat-num">1.2k</div><div class="stat-lbl">Posts</div></div>
+  <div class="stat-item"><div class="stat-num">18</div><div class="stat-lbl">Online now</div></div>
+  <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Categories</div></div>
+</div>
+
+<div class="new-topic-bar">
+  <button class="new-topic-btn" onclick="alert('Sign in to post a new topic')">+ New Topic</button>
+  <div class="sort-options">
+    <button class="sort-btn active">Latest</button>
+    <button class="sort-btn" onclick="this.parentElement.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Top</button>
+    <button class="sort-btn" onclick="this.parentElement.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">New</button>
+    <button class="sort-btn" onclick="this.parentElement.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Unread</button>
+  </div>
+</div>
+
+<div class="community-layout">
+  <main class="feed">
+    <div class="category-tabs">
+      <button class="cat-tab active" onclick="filterCat(this,'all')">All Categories</button>
+      <button class="cat-tab" onclick="filterCat(this,'dev')">Developer Support</button>
+      <button class="cat-tab" onclick="filterCat(this,'ros')">ROS / ROS2</button>
+      <button class="cat-tab" onclick="filterCat(this,'hw')">Hardware</button>
+      <button class="cat-tab" onclick="filterCat(this,'slam')">SLAM &amp; Mapping</button>
+      <button class="cat-tab" onclick="filterCat(this,'announce')">Announcements</button>
+    </div>
+    <div class="pinned-banner"><span style="font-size:12px">📌</span> Pinned topics — Read before posting</div>
+    <div class="topic-list" id="topic-list">
+
+      <div class="topic-row" data-cat="announce" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-a">LF</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-announce">Announcement</span><span class="tag tag-pinned">Pinned</span></div><div class="topic-title-text">Welcome to LidarForge Community — Start Here</div><div class="topic-excerpt">Rules, resources, how to get the most out of the forum. Links to SDK docs, ROS2 driver repo, and hardware spec sheets.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">42</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">LidarForge · 3d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="announce" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-a">LF</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-announce">Announcement</span><span class="tag tag-pinned">Pinned</span></div><div class="topic-title-text">SDK v0.3.0 Released — UDP parser rewrite, better calibration tools</div><div class="topic-excerpt">Breaking changes in packet format, migration guide included. Python and C bindings updated. Download from GitHub.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">17</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">LidarForge · 1d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="ros" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-b">DX</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-ros">ROS2</span><span class="tag tag-slam">SLAM</span></div><div class="topic-title-text">Getting LF-32 working with FAST-LIO2 on Jetson Orin NX</div><div class="topic-excerpt">Sharing my full setup — driver config, launch file, and the extrinsic calibration procedure that finally got stable odometry.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">14</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">devbot_x · 2h ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="dev" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-c">MT</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-dev">Dev</span><span class="tag tag-sdk">SDK</span></div><div class="topic-title-text">Python SDK: parsing raw UDP packets — annotated example code inside</div><div class="topic-excerpt">Spent a weekend reverse-engineering the packet format. Here's a clean Python parser with comments. Should work on v0.2 and v0.3.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">8</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">m_tanaka · 5h ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="hw" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-d">AL</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-hw">Hardware</span></div><div class="topic-title-text">LF-16 vibration isolation mount for DJI F450 frame — 3D print files</div><div class="topic-excerpt">Designed a TPU damping mount for the LF-16. Stl files on Printables. Survived 50+ flights on a 5" racing frame so far.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">22</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">aerial_lab · 1d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="dev" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-e">RN</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-dev">Dev</span></div><div class="topic-title-text">LidarForge vs Ouster OS0-32 point density benchmark — detailed numbers</div><div class="topic-excerpt">Same scene, same range. LF-32 data and OS0 side by side in Open3D. Surprising results in 20-50m range bin.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">31</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">robotics_nerd · 2d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="ros" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-f">RF</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-ros">ROS</span></div><div class="topic-title-text">ROS1 Noetic driver — community maintained port, looking for co-maintainers</div><div class="topic-excerpt">Official support is ROS2 only but I've got a working Noetic port. Needs testing on more machines. Anyone interested?</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">6</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">ros_forever · 3d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="slam" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-b">KL</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-slam">SLAM</span><span class="tag tag-ros">ROS2</span></div><div class="topic-title-text">KISS-ICP with LF-32: config that works outdoors at 20 m/s</div><div class="topic-excerpt">Been testing on a car roof rack. The motion distortion correction in the SDK really helps. My KISS-ICP config attached.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">19</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">kris_l · 4d ago</div></div>
+      </div>
+
+      <div class="topic-row" data-cat="dev" onclick="openTopic(this)">
+        <div class="topic-left"><div class="topic-avatar av-d">SP</div><div class="topic-main"><div class="topic-cats"><span class="tag tag-sdk">SDK</span><span class="tag tag-dev">Dev</span></div><div class="topic-title-text">C bindings for the SDK — embedded integration on STM32 + Ethernet</div><div class="topic-excerpt">Got the LF-16 talking to an STM32H7 over Ethernet. No Linux needed. Sharing the lightweight C wrapper I wrote.</div></div></div>
+        <div class="topic-right"><div class="topic-replies-count">27</div><div class="topic-replies-label">replies</div><div class="topic-meta-right">stm_pro · 1w ago</div></div>
+      </div>
+
+    </div>
+    <div class="load-more"><button class="load-more-btn">Load More Topics</button></div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="join-cta">
+      <h3>Join the community</h3>
+      <p>Sign up to post topics, reply to discussions, and get direct support from the LidarForge team.</p>
+      <button class="join-btn" onclick="alert('Registration opens with official launch. Join the waitlist!')">Create Account</button>
+      <a href="#" class="join-login">Already have an account? Log in</a>
+    </div>
+    <div class="sidebar-block">
+      <div class="sidebar-title">Categories</div>
+      <div class="cat-list">
+        <div class="cat-item" onclick="filterFromSidebar('dev')"><div class="cat-item-left"><div class="cat-dot" style="background:var(--accent)"></div><div><div class="cat-item-name">Developer Support</div><div class="cat-item-desc">SDK, integration, debugging</div></div></div><div class="cat-count">34</div></div>
+        <div class="cat-item" onclick="filterFromSidebar('ros')"><div class="cat-item-left"><div class="cat-dot" style="background:var(--accent2)"></div><div><div class="cat-item-name">ROS / ROS2</div><div class="cat-item-desc">Drivers, launch files, nodes</div></div></div><div class="cat-count">21</div></div>
+        <div class="cat-item" onclick="filterFromSidebar('hw')"><div class="cat-item-left"><div class="cat-dot" style="background:var(--text2)"></div><div><div class="cat-item-name">Hardware</div><div class="cat-item-desc">Mounting, wiring, power</div></div></div><div class="cat-count">18</div></div>
+        <div class="cat-item" onclick="filterFromSidebar('slam')"><div class="cat-item-left"><div class="cat-dot" style="background:#a78bfa"></div><div><div class="cat-item-name">SLAM &amp; Mapping</div><div class="cat-item-desc">Localization, point clouds</div></div></div><div class="cat-count">16</div></div>
+      </div>
+    </div>
+    <div class="sidebar-block">
+      <div class="sidebar-title">Active Members</div>
+      <div class="members-grid">
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(255,107,53,0.15);color:var(--accent2)">DX</div>
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.15);color:#a78bfa">MT</div>
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.15);color:#34d399">AL</div>
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(251,191,36,0.15);color:#fbbf24">RN</div>
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,0.15);color:#f87171">RF</div>
+        <div style="width:32px;height:32px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,0.1);color:var(--accent)">+239</div>
+      </div>
+    </div>
+    <div class="sidebar-block">
+      <div class="sidebar-title">Open Source</div>
+      <div class="repo-list">
+        <div class="repo-item"><div class="repo-name">lidarforge-ros2</div><div class="repo-desc">ROS2 driver — PointCloud2, LaserScan, IMU</div><div class="repo-meta"><span>⭐ 84</span><span>🔀 23 forks</span><span>C++</span></div></div>
+        <div class="repo-item"><div class="repo-name">lidarforge-sdk</div><div class="repo-desc">Low-level SDK, UDP parser, calibration</div><div class="repo-meta"><span>⭐ 61</span><span>🔀 15 forks</span><span>Python</span></div></div>
+        <div class="repo-item"><div class="repo-name">pointcloud-tools</div><div class="repo-desc">SLAM examples, ground segmentation</div><div class="repo-meta"><span>⭐ 38</span><span>🔀 9 forks</span><span>Python</span></div></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-logo">LiDAR<span>Forge</span></div>
+  <ul class="footer-links">
+    <li><a href="index.html#products">Products</a></li>
+    <li><a href="index.html#opensource">Open Source</a></li>
+    <li><a href="community.html">Community</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 LidarForge · community.lidarforge.com</div>
+</footer>
+
+<script>
+function filterCat(btn,cat){document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.topic-row').forEach(row=>{row.style.display=(cat==='all'||row.dataset.cat===cat)?'':'none'})}
+function filterFromSidebar(cat){document.querySelectorAll('.cat-tab').forEach(t=>{t.classList.remove('active');if(t.textContent.toLowerCase().includes(cat)||(cat==='slam'&&t.textContent.includes('SLAM'))||(cat==='ros'&&t.textContent.includes('ROS'))||(cat==='hw'&&t.textContent.includes('Hardware'))||(cat==='dev'&&t.textContent.includes('Developer')))t.classList.add('active')});document.querySelectorAll('.topic-row').forEach(row=>{row.style.display=row.dataset.cat===cat?'':'none'});document.querySelector('.feed').scrollIntoView({behavior:'smooth'})}
+function openTopic(row){alert('Topic: '+row.querySelector('.topic-title-text').textContent+'\n\n[Sign in to read and reply to this discussion]')}
+</script>
+</body>
+</html>
